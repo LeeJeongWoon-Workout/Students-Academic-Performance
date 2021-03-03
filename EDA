@@ -1,0 +1,5 @@
+df=pd.read_csv("xAPI-Edu-Data.csv")
+
+df.columns
+
+sns.jointplot(data=df,hue="Class",x="VisITedResources",y="AnnouncementsView")
