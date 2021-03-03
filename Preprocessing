@@ -1,0 +1,25 @@
+df=pd.read_csv("xAPI-Edu-Data.csv")
+
+def sClass(c):
+  if c=="L":
+    return -1
+  elif c=="M":
+    return 0
+  else:
+    return 1
+
+df["Class"]=df["Class"].map(sClass)
+
+from sklearn.preprocessing import StandardScaler
+X_num = df[["raisedhands","VisITedResources","AnnouncementsView","Discussion"]]
+scaler=StandardScaler()
+scaler.fit(X_num)
+X_scaled = scaler.transform(X_num)
+X_scaled = pd.DataFrame(data=X_scaled, index=X_num.index, columns=X_num.columns)
+X_cat=pd.get_dummies(df[["gender",'StudentAbsenceDays']], dummy_na=True,drop_first=True)
+
+X=pd.concat([X_scaled,X_cat],axis=1)
+Y = df['Class']
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X,Y,test_size=0.3,random_state=1)
